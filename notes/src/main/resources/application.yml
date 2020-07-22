@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+#spring:
+#  data:
+#    elasticsearch:
+#      cluster-nodes: 39.100.194.182:9200
+#      repositories:
+#        enabled: true
+#      cluster-name: my-application
+spring:
+  elasticsearch:
+    rest:
+      uris: 39.100.194.182:9200
