@@ -13,7 +13,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  * @date 2020/6/17
  */
 @Data
-@Document(indexName = "item",type = "docs", shards = 1, replicas = 0)
+@Document(indexName = "item", type = "docs", shards = 1, replicas = 0)
 public class Item {
 
     @Id
@@ -29,7 +29,8 @@ public class Item {
     @Field(index = false, type = FieldType.Keyword)
     private String images; // 图片地址
 
-    public Item(){}
+    public Item() {
+    }
 
     public Item(Long id, String title, String category, String brand, Double price, String images) {
         this.id = id;

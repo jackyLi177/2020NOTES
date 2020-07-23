@@ -24,33 +24,33 @@ public class HelloController {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         return "1234";
     }
 
     @GetMapping("/init")
-    public boolean initES(){
+    public boolean initES() {
         return elasticsearchRestTemplate.indexOps(Item.class).create();
     }
 
     @GetMapping("/initCar")
-    public boolean initCar(){
+    public boolean initCar() {
         return elasticsearchRestTemplate.indexOps(Car.class).create();
     }
 
     @GetMapping("/delete")
-    public boolean delete(){
+    public boolean delete() {
         return elasticsearchRestTemplate.indexOps(Item.class).delete();
     }
 
     @GetMapping("/batchInit")
-    public boolean batchInit(){
+    public boolean batchInit() {
         int n = 100;
         ArrayList<Item> items = new ArrayList<Item>();
         ArrayList<Car> cars = new ArrayList<Car>();
-        for (int i = 1;i<=100;i++){
-            items.add(new Item(new Long(i),"title" + i,"category" + i,"brand" + i,new Double(i * 5000),"img" + i));
-            cars.add(new Car(new Long(i),"brand" + i,new Double(i * 10000),"model" + i));
+        for (int i = 1; i <= 100; i++) {
+            items.add(new Item(new Long(i), "title" + i, "category" + i, "brand" + i, new Double(i * 5000), "img" + i));
+            cars.add(new Car(new Long(i), "brand" + i, new Double(i * 10000), "model" + i));
         }
         elasticsearchRestTemplate.save(items);
         elasticsearchRestTemplate.save(cars);
@@ -58,7 +58,7 @@ public class HelloController {
     }
 
     @GetMapping("/save")
-    public String save(){
+    public String save() {
         Item item = new Item();
         item.setId(1L);
         item.setBrand("奔驰");
@@ -71,8 +71,8 @@ public class HelloController {
     }
 
     @GetMapping("/getById/{id}")
-    public Item getById(@PathVariable String id){
-        return elasticsearchRestTemplate.get(id,Item.class);
+    public Item getById(@PathVariable String id) {
+        return elasticsearchRestTemplate.get(id, Item.class);
     }
 
 }
