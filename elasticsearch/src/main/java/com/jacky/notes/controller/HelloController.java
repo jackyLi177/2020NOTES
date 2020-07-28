@@ -2,9 +2,13 @@ package com.jacky.notes.controller;
 
 import com.jacky.notes.entity.Car;
 import com.jacky.notes.entity.Item;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,17 +34,17 @@ public class HelloController {
 
     @GetMapping("/init")
     public boolean initES() {
-        return elasticsearchRestTemplate.indexOps(Item.class).create();
+        return elasticsearchRestTemplate.createIndex(Item.class);
     }
 
     @GetMapping("/initCar")
     public boolean initCar() {
-        return elasticsearchRestTemplate.indexOps(Car.class).create();
+        return elasticsearchRestTemplate.createIndex(Car.class);
     }
 
     @GetMapping("/delete")
     public boolean delete() {
-        return elasticsearchRestTemplate.indexOps(Item.class).delete();
+        return elasticsearchRestTemplate.deleteIndex(Item.class);
     }
 
     @GetMapping("/batchInit")
@@ -52,8 +56,10 @@ public class HelloController {
             items.add(new Item(new Long(i), "title" + i, "category" + i, "brand" + i, new Double(i * 5000), "img" + i));
             cars.add(new Car(new Long(i), "brand" + i, new Double(i * 10000), "model" + i));
         }
-        elasticsearchRestTemplate.save(items);
-        elasticsearchRestTemplate.save(cars);
+        IndexQuery itemQuery = new IndexQueryBuilder().withObject(items).build();
+        IndexQuery carQuery = new IndexQueryBuilder().withObject(cars).build();
+        elasticsearchRestTemplate.index(itemQuery);
+        elasticsearchRestTemplate.index(carQuery);
         return true;
     }
 
@@ -66,13 +72,15 @@ public class HelloController {
         item.setImages("/dfsafd");
         item.setPrice(new Double(40000));
         item.setTitle("benz SUV");
-        elasticsearchRestTemplate.save(item);
+        IndexQuery qu = new IndexQueryBuilder().withId(item.getId().toString()).withObject(item).build();
+        elasticsearchRestTemplate.index(qu);
         return "succ";
     }
 
     @GetMapping("/getById/{id}")
     public Item getById(@PathVariable String id) {
-        return elasticsearchRestTemplate.get(id, Item.class);
+//        return elasticsearchRestTemplate.get(id, Item.class);
+        return null;
     }
 
 }
